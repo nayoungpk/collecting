@@ -1,38 +1,24 @@
-.App {
+*{
+  text-decoration: none;
+}
+.background{
+          background-image: url('C:/Users/박나영/Desktop/react/collecting/src/images/background.jpg'); /* 이미지 파일의 경로로 변경 */
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          height: 100vh; /* 화면 높이에 맞게 설정 */
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: #ffffff; /* 텍스트 색상 설정 (배경 이미지 위의 텍스트가 잘 보이도록) */
+}
+
+.footer {
+  color: #fff;
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  padding: 10px;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
 }

@@ -1,0 +1,80 @@
+.Mainpage {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    margin: 20px;
+    padding: 10px;
+}
+
+.e71_30 { 
+    color: rgb(255, 255, 255);
+    width: 900px;
+    height: 230px;
+    font-family: Inter;
+    font-size: 40px;
+    font-weight: bold;
+    letter-spacing: 0;
+   margin-left: -350px;
+}
+
+.e71_31 { 
+    color: rgb(255, 255, 255);
+    width: 900px;
+    height: 230px;
+    font-family: Inter;
+    font-size: 90px;
+    font-weight: bold;
+    letter-spacing: 0;
+}
+
+.e71_49 { 
+    color: rgb(255, 255, 255);
+    width: 312px;
+    height: 36px;
+    font-family: Inter;
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 0;
+   margin-left: 10px;
+}
+
+.e71_32 {  
+    color: rgba(147.89999574422836, 140.9979549050331, 140.9979549050331, 1);
+    width: 537px;
+    height: 24px;
+    font-family: Inter;
+    font-size: 20px;
+    letter-spacing: 0;
+   margin-left: -350px;
+}
+
+
+/*여기 버튼 */
+.button-container {
+   display: flex;
+   margin-top: 30px;
+  }
+  
+  .button1,
+  .button2 {
+   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+   width: 307px;
+   height: 32px;
+   border-radius: 5px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   text-decoration: none;
+   color: #ffffff;
+   margin: 5px;
+  }
+  
+  .button1 {
+   background-color: rgba(197, 61, 61, 1);
+  }
+  
+  .button2 {
+   background-color: rgba(255, 255, 255, 1);
+   color: #000000;
+  }
