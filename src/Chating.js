@@ -1,49 +1,54 @@
+import React, { useState } from 'react';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import './chating.css';
-import backArrowImage from './images/move.png'; 
 
 const Chating = () => {
   const [messages, setMessages] = useState([]);
-  const [inputValue, setInputValue] = useState('');
-  const chatBoxRef = useRef();
+  const [input, setInput] = useState('');
 
-  const sendMessage = () => {
-    if (inputValue.trim() !== '') {
-      setMessages([...messages, inputValue]);
-      setInputValue('');
-    }
+  const addMessage = (content, isUser = false) => {
+    setMessages((prevMessages) => [...prevMessages, { content, isUser }]);
   };
 
-  useEffect(() => {
-    if (chatBoxRef.current) {
-      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+  const handleInputSubmit = (e) => {
+    e.preventDefault();
+    if (input.trim() === '') return;
+
+    // 유저 메시지 추가
+    addMessage(input, true);
+
+    // 챗봇 응답 추가
+    if (!messages.find((msg) => msg.content.includes('무슨 영화 보고 싶어'))) {
+      // 챗봇이 먼저 물어봄
+      addMessage('챗봇: 무슨 영화를 보고 싶으세요?', false);
+    } else {
+      // 챗봇이 이미 물어본 상태일 때
+      // 여기에서 챗봇이 응답 로직을 추가할 수 있습니다.
+      addMessage(`챗봇: "${input}"이(가) 궁금하시군요!`, false);
     }
-  }, [messages]);
+
+    // 입력값 초기화
+    setInput('');
+  };
 
   return (
-    <div className="chat-container">
-      {/* Move the navigation button inside the chat container */}
-      <Link to="/MyPage" className="navigation-button">
-      <img src={backArrowImage} alt="Back" />
-      </Link>
-
-      <div className="chat-box" id="chat-box" ref={chatBoxRef}>
+    <div className="chatbot-container">
+      <div className="chatbot-messages">
         {messages.map((message, index) => (
-          <div key={index}>{message}</div>
+          <div key={index} className={message.isUser ? 'user-message' : 'chatbot-message'}>
+            {message.content}
+          </div>
         ))}
       </div>
-      <div className="input-container">
+      <form onSubmit={handleInputSubmit}>
         <input
           type="text"
-          id="message-input"
-          placeholder="메시지를 입력하세요"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="메시지를 입력하세요..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
         />
-        <button onClick={sendMessage}>전송</button>
-      </div>
+        <button type="submit">전송</button>
+      </form>
     </div>
   );
 };

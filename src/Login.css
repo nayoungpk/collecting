@@ -14,14 +14,21 @@ body {
 	border-radius: 8px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
+
+  .login-container a {
+	color: white; /* Set the color to white */
+	text-decoration: none; /* Remove underline from the links if needed */
+  }
   
   .login-container h2 {
 	margin-bottom: 20px;
 	color: rgb(255, 255, 255);
 	font-size: 40px;
 	margin-bottom: 100px;
+	display: inline-block; /* Make the element only as wide as its content */
+	border-bottom: 5px solid #ccc; /* Add a 2px solid bottom border */
+	padding-bottom: 30px; /* Add some padding below the text for spacing */
   }
-
 
   .login-form {
 	text-align: left;
@@ -39,10 +46,15 @@ body {
   }
   
   .form-group input {
-	background-color:rgba(255, 255, 255, 1);
-	width:525px;
-	height:30px;
-	border-radius:6px;
+	background-color: transparent;
+	width: 525px;
+	height: 30px;
+	border-top: 2px solid transparent; /* Transparent top border */
+	border-left: 2px solid transparent; /* Transparent left border */
+	border-right: 2px solid transparent; /* Transparent right border */
+	border-bottom: 3px solid #ccc; /* Colored bottom border */
+	border-radius: 6px;
+	color: white; /* 텍스트 색상을 흰색으로 변경 */
   }
   
   .login-button {
@@ -67,8 +79,12 @@ body {
 	font-size:15px;
 	letter-spacing:0;
 	margin-top: 20px;
+	margin-left: -10px;
   }
 
 
+  .login-button:active {
+	border-width: 4px; /* Set the border width as needed */
+  }
  
  

@@ -1,0 +1,11 @@
+.profile-update-form .form-group input {
+  background-color: transparent;
+  width: 525px;
+  height: 30px;
+  color: white; /* 텍스트 색상을 흰색으로 변경 */
+  border-top: 2px solid transparent;
+  border-left: 2px solid transparent;
+  border-right: 2px solid transparent;
+  border-bottom: 3px solid #ccc;
+  border-radius: 6px;
+}
