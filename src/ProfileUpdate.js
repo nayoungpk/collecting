@@ -80,7 +80,7 @@ const ProfileUpdate = ({ history }) => {
           />
         </div>
 
-        <button type="submit" className="update-button">
+        <button type="submit" className="update-button1">
           Update Profile
         </button>
 

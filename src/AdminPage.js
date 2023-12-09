@@ -1,52 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import './AdminPage.css'; // Import the CSS file
+
+// Mock data for testing
+const mockUsers = [
+  { id: 1, username: 'user1', password: 'password1', email: 'user1@example.com' },
+  { id: 2, username: 'user2', password: 'password2', email: 'user2@example.com' },
+  { id: 3, username: 'user3', password: 'password3', email: 'user3@example.com' },
+];
 
 const AdminPage = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(mockUsers);
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  useEffect(() => {
-    // 컴포넌트가 마운트될 때 API에서 사용자 목록을 가져옵니다.
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get('/api/users'); // 실제 API 엔드포인트로 대체하세요.
-      setUsers(response.data);
-    } catch (error) {
-      console.error('사용자 정보를 가져오는 중 에러 발생:', error);
-    }
+  const handleEdit = (user) => {
+    console.log('Edit user:', user);
   };
 
-  const deleteUser = async (userId) => {
-    try {
-      // 사용자를 삭제하는 API 엔드포인트를 호출합니다.
-      await axios.delete(`/api/users/${userId}`); // 실제 API 엔드포인트로 대체하세요.
-      // 삭제 후 사용자 목록을 업데이트합니다.
-      fetchUsers();
-    } catch (error) {
-      console.error('사용자 삭제 중 에러 발생:', error);
-    }
+  const handleDelete = (username) => {
+    setUsers(users.filter((user) => user.username !== username));
   };
 
   return (
-    <div className="admin-page-container">
-      <h2>관리자 페이지</h2>
+    <div>
+      <h1>Admin Page</h1>
       <table>
         <thead>
           <tr>
-            <th>사용자명</th>
-            <th>이메일</th>
-            <th>동작</th>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Email</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user.id}>
+            <tr key={user.username}>
+              <td>{user.id}</td>
               <td>{user.username}</td>
+              <td>{user.password}</td>
               <td>{user.email}</td>
               <td>
-                <button onClick={() => deleteUser(user.id)}>삭제</button>
+                <button onClick={() => handleEdit(user)}>Edit</button>
+                <button onClick={() => handleDelete(user.username)}>Delete</button>
               </td>
             </tr>
           ))}

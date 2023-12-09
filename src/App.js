@@ -7,6 +7,7 @@ import Signup from './Signup';
 import MyPage from './MyPage';
 import Chating from './Chating';
 import ProfileUpdate from './ProfileUpdate'; // Import the ProfileUpdate component
+import AdminPage from './AdminPage'; // Import the AdminPage component
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/MyPage" element={<MyPage />} />
             <Route path="/Chating" element={<Chating />} />
             <Route path="/profileUpdate" element={<ProfileUpdate />} /> {/* Add this line */}
+            <Route path="/AdminPage" element={<AdminPage />} />
           </Routes>
         </div>
         <footer className="footer">
