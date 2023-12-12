@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './MainPage.css'; // Import the CSS file
-import image1 from './images/3.png'; // Adjust the paths accordingly
-import image2 from './images/3.png';
-import image3 from './images/3.png';
+
 
 
 const MainPage = () => {

@@ -27,3 +27,26 @@ table {
   button:hover {
     background-color: #45a049;
   }
+  .custom-heading{
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  h1 {
+    position: relative; 
+    display: inline-block; 
+    padding-bottom: 10px; 
+  }
+  
+
+  h1::after {
+    content: ''; 
+    position: absolute; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 3px; 
+    background-color: #ffffff; 
+    margin-top: 15px; 
+    display: block; 
+  }

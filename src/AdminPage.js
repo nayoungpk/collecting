@@ -1,28 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import './AdminPage.css'; // Import the CSS file
-
-// Mock data for testing
-const mockUsers = [
-  { id: 1, username: 'user1', password: 'password1', email: 'user1@example.com' },
-  { id: 2, username: 'user2', password: 'password2', email: 'user2@example.com' },
-  { id: 3, username: 'user3', password: 'password3', email: 'user3@example.com' },
-];
+import './AdminPage.css';
+import axios from 'axios'; // Import axios for API requests
 
 const AdminPage = () => {
-  const [users, setUsers] = useState(mockUsers);
+  const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [newUser, setNewUser] = useState({
+    username: '',
+    password: '',
+    email: '',
+  });
+
+  // Fetch users from the database on component mount
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      // Fetch users from the backend API
+      const response = await axios.get('/api/users'); // Replace with the actual API endpoint
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
 
   const handleEdit = (user) => {
     console.log('Edit user:', user);
+    // You can implement the logic for editing a user here
   };
 
-  const handleDelete = (username) => {
-    setUsers(users.filter((user) => user.username !== username));
+  const handleDelete = async (username) => {
+    try {
+      // Delete user from the backend API
+      await axios.delete(`/api/users/${username}`); // Replace with the actual API endpoint
+      // Update the users state after deletion
+      setUsers(users.filter((user) => user.username !== username));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+
+  const handleAddUser = async () => {
+    try {
+      // Add a new user to the backend API
+      await axios.post('/api/users', newUser); // Replace with the actual API endpoint
+      // Fetch the updated list of users after addition
+      fetchUsers();
+      // Clear the newUser state after adding the user
+      setNewUser({
+        username: '',
+        password: '',
+        email: '',
+      });
+    } catch (error) {
+      console.error('Error adding user:', error);
+    }
   };
 
   return (
     <div>
       <h1>Admin Page</h1>
+      <h3 className="custom-heading">
+        This is the Administrator page. Members' information can be deleted and modified.
+      </h3>
       <table>
         <thead>
           <tr>
@@ -48,6 +90,40 @@ const AdminPage = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Add a new user form */}
+      <div>
+        <h2>Add New User</h2>
+        <form>
+          <label>
+            Username:
+            <input
+              type="text"
+              value={newUser.username}
+              onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
+            />
+          </label>
+          <label>
+            Password:
+            <input
+              type="password"
+              value={newUser.password}
+              onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+            />
+          </label>
+          <label>
+            Email:
+            <input
+              type="email"
+              value={newUser.email}
+              onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+            />
+          </label>
+          <button type="button" onClick={handleAddUser}>
+            Add User
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

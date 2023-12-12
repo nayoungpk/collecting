@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './MyPage.css';
 import { Link, useNavigate } from 'react-router-dom';
-import ImageComponent from './ImageComponent';
 import moveImage from 'C:/Users/박나영/Desktop/react/collecting/src/images/buttom.png';
+import defaultImage from 'C:/Users/박나영/Desktop/react/collecting/src/images/4.png';
 
 const MyPage = () => {
-  const navigate = useNavigate();// useNavigate 훅을 초기화합니다.
+  const navigate = useNavigate();
+  const [imageUrls, setImageUrls] = useState([]);
 
-   // 로그아웃 처리를 위한 함수입니다.
+  useEffect(() => {
+    // 데이터베이스에서 이미지 URL 가져오기~
+    fetch('/api/getImages') // 실제 엔드포인트로 변경~
+      .then(response => response.json())
+      .then(data => setImageUrls(data))
+      .catch(error => {
+        console.error('이미지 가져오기 오류:', error);
+        // 이미지 가져오기 실패 시 기본 이미지 추가~
+        setImageUrls([defaultImage]);
+      });
+  }, []);
+
   const handleLogout = () => {
-       // 로그아웃 로직을 수행합니다. (인증 상태 초기화 등)
-      // 여기서는 단순히 홈 페이지로 리디렉션하는 로직을 시뮬레이션합니다.
     navigate('/');
   };
 
@@ -38,7 +48,13 @@ const MyPage = () => {
         <Link to="/ProfileUpdate" className="update-button">
           Update Profile
         </Link>
-        <ImageComponent />
+      </div>
+
+      <div className="image-scroll-box">
+        <h1 className="movie_title">MOVIE</h1>
+        {imageUrls.map((imageUrl, index) => (
+          <img key={index} src={imageUrl} alt={`Sample ${index + 1}`} />
+        ))}
       </div>
     </div>
   );

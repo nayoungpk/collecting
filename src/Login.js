@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Login.css';
 
 const Login = () => {
@@ -7,19 +8,34 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    // 여기서 실제로 백엔드 API 호출을 수행하는 대신에,
-    // 임시로 사용자명과 비밀번호를 확인하여 로그인을 시뮬레이션합니다.
-    if (username === '1' && password === '1') {
-      // 아이디와 비밀번호가 "1"일 때 관리자 페이지로 이동
-      navigate('/AdminPage');
-    } else if (username === '12' && password === '12') {
-      // 일반 사용자 로그인 성공 시 MyPage로 이동
-      navigate('/MyPage');
-    } else {
-      alert('로그인 실패. 사용자명과 비밀번호를 확인하세요.');
+    try {
+      // 아이디가 '1'이고 비밀번호가 '1'인 경우를 예외로 처리
+      if (username === '1' && password === '1') {
+        navigate('/AdminPage');
+        return;
+      }
+
+      // 아이디가 '12'이고 비밀번호가 '12'인 경우를 예외로 처리
+      if (username === '12' && password === '12') {
+        navigate('/MyPage');
+        return;
+      }
+
+      // 실제로는 서버에서 사용자 인증을 처리하는 API를 호출해야 합니다.
+      const response = await axios.post('/api/login', { username, password });
+
+      // 예시: 서버에서 반환하는 데이터에 따라 로그인 처리
+      if (response.data.role === 'user') {
+        navigate('/MyPage');
+      } else {
+        alert('로그인 실패. 사용자명과 비밀번호를 확인하세요.');
+      }
+    } catch (error) {
+      console.error('로그인 오류:', error);
+      alert('로그인 중 오류가 발생했습니다.');
     }
   };
 
