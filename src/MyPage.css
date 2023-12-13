@@ -103,7 +103,7 @@
 	border-radius: 5px; /* 둥근 테두리 설정 */
 	background-color: transparent; /* 배경색을 투명으로 설정 */
 	color: #ffffff; /* 글씨 색을 흰색으로 설정 */
-	font-size: 16px;
+	font-size: 20px;
 	cursor: pointer;
 	transition: background-color 0.3s; /* 배경색 변화에 대한 transition 효과 추가 */
 	margin-right: 10px;

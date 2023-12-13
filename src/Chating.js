@@ -56,6 +56,9 @@ const Chating = () => {
 
       // 영화 정보 메시지 추가 (수정된 부분)
       addMessage(`collecting : "${movieData.original_title}" - ${movieData.overview} - Release Date: ${movieData.release_date}`, false);
+
+      // 디버깅을 위해 AI 모델의 결과도 화면에 출력
+      addMessage(`AI 모델 응답: ${aiResponse}`, false);
     } catch (error) {
       // 오류가 발생한 경우
       addMessage('collecting : 죄송합니다. 오류가 발생했습니다. 다시 입력해주세요.', false);
