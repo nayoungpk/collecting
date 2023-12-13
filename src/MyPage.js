@@ -1,27 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import './MyPage.css';
 import { Link, useNavigate } from 'react-router-dom';
-import moveImage from 'C:/Users/박나영/Desktop/react/collecting/src/images/buttom.png';
-import defaultImage from 'C:/Users/박나영/Desktop/react/collecting/src/images/4.png';
+import moveImage from './images/buttom.png'; // 변경된 경로
+import defaultImage from './images/4.png'; // 변경된 경로
 
 const MyPage = () => {
   const navigate = useNavigate();
   const [imageUrls, setImageUrls] = useState([]);
+  const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+  const [selectedImageOverview, setSelectedImageOverview] = useState(null);
 
   useEffect(() => {
-    // 데이터베이스에서 이미지 URL 가져오기~
-    fetch('/api/getImages') // 실제 엔드포인트로 변경~
+    // 데이터베이스에서 이미지 URL 가져오기
+    fetch('/api/mypage') // 실제 엔드포인트로 변경
       .then(response => response.json())
-      .then(data => setImageUrls(data))
+      .then(data => {
+        // 이미지 URL을 가져오지 못했거나 비어있을 경우 기본 이미지 추가
+        setImageUrls(data.length > 0 ? data : [defaultImage]);
+      })
       .catch(error => {
         console.error('이미지 가져오기 오류:', error);
-        // 이미지 가져오기 실패 시 기본 이미지 추가~
+        // 이미지 가져오기 실패 시 기본 이미지 추가
         setImageUrls([defaultImage]);
       });
   }, []);
 
   const handleLogout = () => {
     navigate('/');
+  };
+
+  const handleImageClick = (imageUrl) => {
+    // 이미지 클릭 시 모달을 열고 선택된 이미지 설정
+    setSelectedImageUrl(imageUrl);
+    setSelectedImageOverview(null); // Reset the overview for the default image
+  };
+
+  const handleCloseModal = () => {
+    // 모달 닫기
+    setSelectedImageUrl(null);
+    setSelectedImageOverview(null);
   };
 
   return (
@@ -40,7 +57,7 @@ const MyPage = () => {
           </span>
         </p>
         <Link to="/Chating" className="my-button">
-          <img src={moveImage} alt="Your Image" />
+          <img src={moveImage} alt="" />
         </Link>
         <button className="logout-button" onClick={handleLogout}>
           Logout
@@ -53,9 +70,35 @@ const MyPage = () => {
       <div className="image-scroll-box">
         <h1 className="movie_title">MOVIE</h1>
         {imageUrls.map((imageUrl, index) => (
-          <img key={index} src={imageUrl} alt={`Sample ${index + 1}`} />
+          <div key={index} className="movie-image-container">
+            <img
+              src={process.env.PUBLIC_URL + imageUrl}
+              alt={`Sample ${index + 1}`}
+              onClick={() => handleImageClick(imageUrl)}
+            />
+          </div>
         ))}
       </div>
+
+      {selectedImageUrl && (
+  <div className="modal">
+    <div className="modal-content">
+      <span className="close" onClick={handleCloseModal}>
+        &times;
+      </span>
+      {selectedImageOverview && (
+        <>
+          <img src={process.env.PUBLIC_URL + selectedImageUrl} alt="Selected Movie" />
+          <p>{selectedImageOverview}</p>
+        </>
+      )}
+      {!selectedImageOverview && <p>Overview not available</p>}
+      <button className="cancel-button" onClick={handleCloseModal}>
+        Cancel
+      </button>
+    </div>
+  </div>
+)}
     </div>
   );
 };

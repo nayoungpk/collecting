@@ -2,7 +2,7 @@
   text-decoration: none;
 }
 .background{
-          background-image: url('C:/Users/박나영/Desktop/react/collecting/src/images/background.jpg'); /* 이미지 파일의 경로로 변경 */
+          background-image: url('./images/background.jpg');
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;

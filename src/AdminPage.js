@@ -1,70 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import './AdminPage.css';
-import axios from 'axios'; // Import axios for API requests
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [newUser, setNewUser] = useState({
-    username: '',
-    password: '',
-    email: '',
-  });
+ //const [selectedUser, setSelectedUser] = useState(null);
 
-  // Fetch users from the database on component mount
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    // 데이터를 가져올 API 엔드포인트 URL
+    const apiUrl = '/api/updateProfile'; // 실제 백엔드 API 주소로 수정
 
-  const fetchUsers = async () => {
-    try {
-      // Fetch users from the backend API
-      const response = await axios.get('/api/users'); // Replace with the actual API endpoint
-      setUsers(response.data);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    }
-  };
+    // 데이터를 가져오는 함수
+    const fetchData = async () => {
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    // 데이터 가져오기
+    fetchData();
+  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행되도록 설정
 
   const handleEdit = (user) => {
     console.log('Edit user:', user);
-    // You can implement the logic for editing a user here
   };
 
   const handleDelete = async (username) => {
     try {
-      // Delete user from the backend API
-      await axios.delete(`/api/users/${username}`); // Replace with the actual API endpoint
-      // Update the users state after deletion
-      setUsers(users.filter((user) => user.username !== username));
+      // 삭제 요청을 보낼 API 엔드포인트 URL
+      const deleteApiUrl = `/api/updateProfile${username}`; // 실제 백엔드 API 주소로 수정
+
+      // 삭제 요청 보내기
+      await fetch(deleteApiUrl, { method: 'DELETE' });
+
+      // 삭제 후 업데이트된 사용자 목록 가져오기
+      const response = await fetch('/api/updateProfile'); // 실제 백엔드 API 주소로 수정
+      const data = await response.json();
+      setUsers(data);
     } catch (error) {
       console.error('Error deleting user:', error);
-    }
-  };
-
-  const handleAddUser = async () => {
-    try {
-      // Add a new user to the backend API
-      await axios.post('/api/users', newUser); // Replace with the actual API endpoint
-      // Fetch the updated list of users after addition
-      fetchUsers();
-      // Clear the newUser state after adding the user
-      setNewUser({
-        username: '',
-        password: '',
-        email: '',
-      });
-    } catch (error) {
-      console.error('Error adding user:', error);
     }
   };
 
   return (
     <div>
       <h1>Admin Page</h1>
-      <h3 className="custom-heading">
-        This is the Administrator page. Members' information can be deleted and modified.
-      </h3>
+      <h3 className="custom-heading">This is the Administrator page. Members' information can be deleted and modified.</h3>
       <table>
         <thead>
           <tr>
@@ -90,40 +74,6 @@ const AdminPage = () => {
           ))}
         </tbody>
       </table>
-
-      {/* Add a new user form */}
-      <div>
-        <h2>Add New User</h2>
-        <form>
-          <label>
-            Username:
-            <input
-              type="text"
-              value={newUser.username}
-              onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
-            />
-          </label>
-          <label>
-            Password:
-            <input
-              type="password"
-              value={newUser.password}
-              onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
-            />
-          </label>
-          <label>
-            Email:
-            <input
-              type="email"
-              value={newUser.email}
-              onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-            />
-          </label>
-          <button type="button" onClick={handleAddUser}>
-            Add User
-          </button>
-        </form>
-      </div>
     </div>
   );
 };

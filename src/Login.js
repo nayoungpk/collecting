@@ -24,7 +24,7 @@ const Login = () => {
         return;
       }
 
-      // 실제로는 서버에서 사용자 인증을 처리하는 API를 호출해야 합니다.
+      // 실제로는 서버에서 사용자 인증을 처리하는 API를 호출
       const response = await axios.post('/api/login', { username, password });
 
       // 예시: 서버에서 반환하는 데이터에 따라 로그인 처리
