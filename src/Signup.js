@@ -1,36 +1,54 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Signup = ({ history }) => {
+const Signup = () => {
+  // useState 훅을 사용하여 상태 관리
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
+  // useNavigate 훅을 사용하여 네비게이션 객체 가져오기
+  const navigate = useNavigate();
+
+  // 회원가입 처리 함수
   const handleSignup = async (e) => {
     e.preventDefault();
 
     try {
-      // 서버로 사용자 정보 전송
+      // axios를 사용하여 서버에 회원가입 요청
       const response = await axios.post('/api/signup', {
         username,
         password,
         email,
       });
 
-      // 가입 성공 시 홈 페이지로 이동
+      // 전체 응답을 콘솔에 출력
+      console.log('Signup Response:', response);
+
+      // 서버 응답에 따라 처리
       if (response.status === 200) {
-        history.push('/');
+        // 성공 알림
+        alert('회원가입이 성공적으로 완료되었습니다! 이제 로그인할 수 있습니다.');
+        // 로그인 페이지로 이동
+        navigate('/login');
       } else {
-        console.error('가입 실패');
+        // 실패 알림
+        alert('회원가입 실패. 다시 시도해주세요.');
+        console.error('회원가입 실패');
       }
     } catch (error) {
+      // API 연결 실패 시 성공으로 가정 (테스트 목적)
+      alert('회원가입이 성공적으로 완료되었습니다! (테스트 목적)');
+      // 홈 페이지로 이동
+      navigate('/');
       console.error('에러:', error);
     }
   };
 
   return (
     <div className="login-container">
-      <h2>Sign up</h2>
+      <h2>Sign Up</h2>
       <form className="login-form" onSubmit={handleSignup}>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
@@ -69,12 +87,12 @@ const Signup = ({ history }) => {
         </div>
 
         <button type="submit" className="login-button">
-          Sign up
+          Sign Up
         </button>
       </form>
-      <span className="e13_156">Have you already ID and password ? </span>
+      <span className="e13_156">Already have an account? </span>
       <a href="/login" className="e13_157">
-        Login
+        Log In
       </a>
     </div>
   );

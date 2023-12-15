@@ -64,7 +64,7 @@
     width: 100%; /* Set the width as needed */
     height: auto; /* Set the height as needed */
     margin-top: 20px; /* Adjust the margin as needed */
-    border: 2px solid #000; /* Add a border with a color of your choice */
+    border: 2px solid #bdbdbd; /* Add a border with a color of your choice */
     border-radius: 8px; /* Add border-radius for rounded corners */
     overflow: hidden; /* Hide overflowing content */
   }
@@ -84,9 +84,10 @@
 	text-decoration: none;
   }
   
-.update-button {
+  .update-button {
 	padding: 10px 20px;
-	border: 2px solid #ffffff;
+	border: none; /* 테두리 초기화 */
+	border-bottom: 2px solid #ffffff; /* 흰색 밑줄 설정 */
 	border-radius: 5px; /* 둥근 테두리 설정 */
 	background-color: transparent;
 	color: #ffffff;
@@ -96,18 +97,26 @@
 	margin-top: 5px; /* 원하는 간격 값으로 조절 */
   }
   
-.logout-button {
+  .update-button:hover {
+	border-bottom: 2px solid transparent; /* 마우스 호버 시 밑줄 숨김 */
+  }
+  
+  .logout-button1 {
 	display: inline-block;
 	padding: 10px 20px;
-	border: 2px solid #ffffff; /* 흰색 테두리 */
+	border: none; /* 테두리 초기화 */
+	border-bottom: 2px solid #ffffff; /* 흰색 밑줄 설정 */
 	border-radius: 5px; /* 둥근 테두리 설정 */
 	background-color: transparent; /* 배경색을 투명으로 설정 */
 	color: #ffffff; /* 글씨 색을 흰색으로 설정 */
-	font-size: 20px;
+	font-size: 16px;
 	cursor: pointer;
 	transition: background-color 0.3s; /* 배경색 변화에 대한 transition 효과 추가 */
 	margin-right: 10px;
+  }
 
+  .logout-button1:hover {
+	border-bottom: 2px solid transparent; /* 마우스 호버 시 밑줄 숨김 */
   }
 
 .scroll-image {
@@ -125,31 +134,24 @@
   }
   
   /* 스크롤 바 관련 스타일 */
-.image-scroll-box {
+  .image-scroll-box {
 	display: flex;
 	margin-top: 320px;
 	background-color: rgba(0, 0, 0, 0.9);
 	padding: 20px;
 	margin-left: 600px;
-	width: 1000px;
+	width: 800px;
 	margin-bottom: 20px;
-	overflow-x: auto; /* 스크롤 바를 항상 보이도록 설정 */
+	overflow-x: scroll; /* Set to scroll instead of auto */
+	border: 3px solid rgba(189, 189, 189, 0.2);
   }
-  
-  /* 화면 넓이가 600px 이상일 때만 스크롤 바가 나타나도록 스타일을 추가 */
-  @media (min-width: 300px) {
-	.image-scroll-box {
-	  overflow-x: auto;
-	}
-  }
-
 .movie_title{
 	margin-right: 40px;
   }
 
-.image-scroll-box::-webkit-scrollbar {
+  .image-scroll-box::-webkit-scrollbar {
 	width: 3px; /* 스크롤바의 너비 */
-	height: 8px;
+	height: 5px; /* Reduce the height to make the scrollbar shorter */
   }
   
   /* 스크롤바 트랙 (배경) 스타일링 */

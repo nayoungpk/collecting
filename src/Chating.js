@@ -12,10 +12,10 @@ const Chating = () => {
   useEffect(() => {
     // 컴포넌트가 처음 렌더링 될 때만 실행
     if (messages.length === 0) {
-      console.log('useEffect is running');
+      // 최초 한 번만 메시지를 추가하도록 수정
       addMessage('collecting : 보고싶은 영화의 줄거리나 키워드를 입력해주세요', false);
     }
-  }, [messages]);
+  }, []); // 빈 배열로 전달하여 한 번만 실행되도록 함
 
   useEffect(() => {
     // messages가 업데이트 될 때마다 스크롤을 최하단으로 조절
@@ -24,13 +24,19 @@ const Chating = () => {
 
   const addMessage = (content, isUser = false) => {
     const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const messageWithTime = `${content} - ${currentTime}`; // 시간과 메시지를 '-'로 구분하여 합침
+    const messageWithTime = `${content} - ${currentTime}`;
 
-    setMessages((prevMessages) => [...prevMessages, { content: messageWithTime, isUser }]);
+    // 출력되는 느낌을 주기 위해 각 메시지를 일정한 시간 간격으로 추가
+    const delay = 600; // 각 메시지 간격 (밀리초)
+
+    setTimeout(() => {
+      setMessages((prevMessages) => [...prevMessages, { content: messageWithTime, isUser }]);
+      scrollToBottom(); // 메시지를 추가할 때마다 스크롤을 최하단으로 이동
+    }, delay);
   };
 
   const handleDeleteAllMessages = () => {
-    // 모든 메시지 및 영화 정보 삭제
+    // 모든 메시지 및 영화 정보를 삭제합니다.
     setMessages([]);
     setMovieInfo(null);
   };
@@ -39,29 +45,39 @@ const Chating = () => {
     e.preventDefault();
     if (input.trim() === '') return;
 
-    // 유저 메시지 추가
+    // 유저 메시지를 추가합니다.
     addMessage(input, true);
 
-    // AI 모델과 연결하여 응답 받기
+    setTimeout(() => {
+      addMessage('추천할 영화를 찾고 있습니다...', false);
+    }, 1500); // 500 밀리초(0.5초)로 설정, 필요에 따라 조절 가능
+
     try {
-      // 사용자 입력을 AI 모델에 전달하고 AI 응답을 받아옴
-      const aiResponse = await simulateAIRequest(input);
-
-      // 챗봇 응답 추가
-      addMessage(`collecting : "${aiResponse}"`, false);
-
-      // AI 응답을 가지고 영화 정보 가져오기 (API 호출)
-      const movieData = await fetchMovieData(input);
+      // 영화 정보를 API에서 가져오는 비동기 함수를 호출합니다.
+      const movieData = await fetchMovieDataFromApi(input);
       setMovieInfo(movieData);
 
-      // 영화 정보 메시지 추가 (수정된 부분)
-      addMessage(`collecting : "${movieData.original_title}" - ${movieData.overview} - Release Date: ${movieData.release_date}`, false);
+      // 일정 시간 간격을 두고 챗봇 응답 및 영화 정보 메시지를 추가합니다.
+      setTimeout(() => {
+        addMessage(`포스터: ${movieData.data.backdrop_path}`, false);
+      }, 500); // 500 밀리초(0.5초)로 설정, 필요에 따라 조절 가능
 
-      // 디버깅을 위해 AI 모델의 결과도 화면에 출력
-      addMessage(`AI 모델 응답: ${aiResponse}`, false);
+      setTimeout(() => {
+        addMessage(`영화제목: ${movieData.data.original_title}`, false);
+      }, 1000); // 1000 밀리초(1초)로 설정, 필요에 따라 조절 가능
+
+      setTimeout(() => {
+        addMessage(`줄거리: ${movieData.data.overview}`, false);
+      }, 1500); // 1500 밀리초(1.5초)로 설정, 필요에 따라 조절 가능
+
+      setTimeout(() => {
+        addMessage(`개봉일: ${movieData.data.release_date}`, false);
+      }, 2000); // 2000 밀리초(2초)로 설정, 필요에 따라 조절 가능
     } catch (error) {
-      // 오류가 발생한 경우
-      addMessage('collecting : 죄송합니다. 오류가 발생했습니다. 다시 입력해주세요.', false);
+      // 오류가 발생한 경우 일정 시간 후에 오류 메시지를 추가합니다.
+      setTimeout(() => {
+        addMessage('죄송합니다. 오류가 발생했습니다. 다시 입력해주세요.', false);
+      }, 2500); // 500 밀리초(0.5초)로 설정, 필요에 따라 조절 가능
     }
 
     // 입력값 초기화
@@ -69,50 +85,35 @@ const Chating = () => {
   };
 
   const scrollToBottom = () => {
+    // 메시지 컨테이너를 최하단으로 스크롤합니다.
     messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
   };
 
-  // AI 모델과 통신하는 비동기 함수 (임시로 비동기적으로 응답을 시뮬레이션하는 함수)
-  const simulateAIRequest = (userInput) => {
-    return new Promise((resolve) => {
-      // 여기에서 실제 AI 모델과 통신하고 응답을 받아오는 로직을 추가할 수 있습니다.
-      // 임시로 1초 후에 응답을 시뮬레이션합니다.
-      setTimeout(() => {
-        // 성공적인 응답
-        resolve(`"${userInput}"에 대한 응답입니다.`);
-        // 실패하는 경우:
-        // reject(new Error('AI 모델에서 오류가 발생했습니다.'));
-      }, 1000);
-    });
-  };
+  const fetchMovieDataFromApi = async (keyword) => {
+    try {
+      // /api/analyze-movie 엔드포인트로 POST 요청을 보내서 영화 정보를 가져옵니다.
+      const response = await fetch('/api/analyze-movie', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ keyword }),
+      });
 
-  // 영화 정보를 가져오는 비동기 함수 (API 호출 추가)
-  const fetchMovieData = (keyword) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        // 여기에서 실제 영화 데이터를 가져오는 로직을 추가할 수 있습니다.
-        // /api/analyze-movie와 같은 실제 엔드포인트로 요청을 보낼 수 있습니다.
-        const response = await fetch('/api/analyze-movie', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ keyword }), // 또는 다른 필요한 데이터
-        });
-
-        if (!response.ok) {
-          // API 호출이 실패한 경우
-          reject(new Error('API 호출이 실패했습니다.'));
-          return;
-        }
-
-        const movieData = await response.json();
-        resolve(movieData);
-      } catch (error) {
-        // 오류가 발생한 경우
-        reject(error);
+      // HTTP 응답이 성공이 아닌 경우 에러를 발생시킵니다.
+      if (!response.ok) {
+        throw new Error(`Error fetching movie data: ${response.status} ${response.statusText}`);
       }
-    });
+
+      // JSON 형식의 응답을 파싱하여 영화 정보를 반환합니다.
+      const movieData = await response.json();
+
+      // 가져온 영화 정보를 데이터베이스에 저장하지 않습니다.
+      return movieData;
+    } catch (error) {
+      console.error('Error fetching movie data:', error);
+      throw error;
+    }
   };
 
   return (

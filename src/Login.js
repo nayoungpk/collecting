@@ -27,9 +27,19 @@ const Login = () => {
       // 실제로는 서버에서 사용자 인증을 처리하는 API를 호출
       const response = await axios.post('/api/login', { username, password });
 
-      // 예시: 서버에서 반환하는 데이터에 따라 로그인 처리
-      if (response.data.role === 'user') {
-        navigate('/MyPage');
+      // 콘솔에 서버 응답 출력
+      console.log('서버 응답:', response.data);
+
+      // 서버에서 반환하는 데이터에 따라 로그인 처리
+      if (response.data.success) {
+        // 서버가 성공 플래그 또는 유사한 속성을 반환한다고 가정
+        if (response.data.role === 'user') {
+          navigate('/MyPage');
+        } else if (response.data.role === 'admin') {
+          navigate('/AdminPage');
+        } else {
+          alert('유효하지 않은 역할입니다. 지원팀에 문의하세요.');
+        }
       } else {
         alert('로그인 실패. 사용자명과 비밀번호를 확인하세요.');
       }

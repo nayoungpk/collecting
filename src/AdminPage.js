@@ -11,27 +11,30 @@ const AdminPage = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/admin'); // /api/admin으로 수정
+      const response = await fetch('/api/admin');
       const data = await response.json();
+      console.log('Response from server:', data);
       setUsers(data);
     } catch (error) {
       console.error('Error fetching data:', error);
+      // 서버 연결 오류 시 임시 데이터를 사용
+      setUsers([
+        { id: 1, username: 'TempUser1', password: 'TempPassword1', email: 'tempuser1@example.com' },
+        { id: 2, username: 'TempUser2', password: 'TempPassword2', email: 'tempuser2@example.com' },
+      ]);
     }
   };
 
   const handleEdit = (userId) => {
     console.log(`Edit user with ID: ${userId}`);
-    // 사용자를 수정하는 페이지로 이동
-    // 이동할 페이지에서는 해당 userId를 사용하여 사용자 정보를 가져와 수정할 수 있도록 구현
   };
 
   const handleDelete = async (userId) => {
     try {
-      const deleteApiUrl = `/api/admin/users/${userId}`; // /api/admin/users/:userId로 수정
+      const deleteApiUrl = `/api/admin/users/${userId}`;
 
       await fetch(deleteApiUrl, { method: 'DELETE' });
 
-      // 삭제 후에는 fetchData를 호출하여 업데이트된 데이터를 가져옴
       fetchData();
     } catch (error) {
       console.error('Error deleting user:', error);
@@ -60,7 +63,6 @@ const AdminPage = () => {
               <td>{user.password}</td>
               <td>{user.email}</td>
               <td>
-                {/* Link 컴포넌트를 사용하여 클릭 시 해당 사용자의 수정 페이지로 이동 */}
                 <Link to={`/admin/users/${user.id}`}>
                   <button onClick={() => handleEdit(user.id)}>Edit</button>
                 </Link>

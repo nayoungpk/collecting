@@ -12,6 +12,8 @@ const ProfileUpdate = ({ history }) => {
   const updateProfileOnServer = async (data) => {
     try {
       const response = await axios.post('/api/updateProfile', data);
+      
+      // 콘솔에 서버 응답 출력
       console.log('서버에서 프로필을 업데이트 중...', response.data);
 
       toast.success('프로필이 성공적으로 업데이트되었습니다.', {
@@ -53,8 +55,10 @@ const ProfileUpdate = ({ history }) => {
         <button className="back-button">Go Back to My Page</button>
       </Link>
       <div>
-        <h4>" If there is no change, please enter the original information and change<br />
-          only the part you want to change. "</h4>
+        <h4>
+          " If there is no change, please enter the original information and change<br />
+          only the part you want to change. "
+        </h4>
       </div>
 
       <form className="profile-update-form" onSubmit={handleUpdate}>
